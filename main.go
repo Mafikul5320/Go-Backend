@@ -16,19 +16,16 @@ import (
 )
 
 func main() {
-	// Load environment variables
+
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, relying on environment variables")
 	}
 
-	// Initialize Database
 	db := repository.InitDB()
 
-	// Initialize Validator
 	v := validator.New()
 	customValidator := &utils.CustomValidator{Validator: v}
 
-	// Initialize Echo
 	e := echo.New()
 
 	// Middleware
@@ -41,7 +38,6 @@ func main() {
 		return c.JSON(200, map[string]string{"status": "ok"})
 	})
 
-	// Manual Dependency Injection
 
 	// 1. User & Auth
 	userRepo := repository.NewUserRepository(db)
@@ -58,7 +54,6 @@ func main() {
 	reservationService := service.NewReservationService(reservationRepo)
 	handler.NewReservationHandler(e, reservationService, customValidator)
 
-	// Start Server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
