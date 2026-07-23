@@ -43,6 +43,9 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 	authService := service.NewAuthService(userRepo)
 	handler.NewAuthHandler(e, authService, customValidator)
+	// User management (admin)
+	userService := service.NewUserService(userRepo)
+	handler.NewUserHandler(e, userService, customValidator)
 
 	// 2. Parking Zones
 	zoneRepo := repository.NewZoneRepository(db)

@@ -9,6 +9,8 @@ type UserRepository interface {
 	CreateUser(user *models.User) error
 	GetUserByEmail(email string) (*models.User, error)
 	GetUserByID(id uint) (*models.User, error)
+	GetAllUsers() ([]models.User, error)
+	DeleteUser(id uint) error
 }
 
 type userRepositoryImpl struct {
@@ -39,4 +41,14 @@ func (r *userRepositoryImpl) GetUserByID(id uint) (*models.User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *userRepositoryImpl) GetAllUsers() ([]models.User, error) {
+	var users []models.User
+	err := r.db.Find(&users).Error
+	return users, err
+}
+
+func (r *userRepositoryImpl) DeleteUser(id uint) error {
+	return r.db.Delete(&models.User{}, id).Error
 }
